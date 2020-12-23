@@ -1,0 +1,8 @@
+For router, i see that merging the 'running' file is okay.
+
+NOTE: these step below can apply to anything :3
+But for the asa. You have to do these steps:
+- delete the NVRAM from device -> config -> global settings (this will delete the start up file)
+- In the 'start-up config' field, choose 'load' and load with the 'running' file (not the startup one)
+- go to console, use command 'reload'
+- voila you have perfectly synced shit.
