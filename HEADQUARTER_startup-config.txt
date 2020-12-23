@@ -1,0 +1,180 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+!
+ip dhcp pool MANAGER
+ network 192.168.1.16 255.255.255.240
+ default-router 192.168.1.30
+ip dhcp pool MEETING
+ network 192.168.1.32 255.255.255.240
+ default-router 192.168.1.46
+ip dhcp pool SALES
+ network 192.168.1.48 255.255.255.240
+ default-router 192.168.1.62
+ dns-server 8.8.8.8
+ip dhcp pool HUMAN
+ network 192.168.1.64 255.255.255.240
+ default-router 192.168.1.78
+ dns-server 8.8.8.8
+ip dhcp pool ACCOUNT
+ network 192.168.1.80 255.255.255.240
+ default-router 192.168.1.94
+ dns-server 8.8.8.8
+ip dhcp pool BUSINESS
+ network 192.168.1.96 255.255.255.240
+ default-router 192.168.1.110
+ dns-server 8.8.8.8
+ip dhcp pool TRANS
+ network 192.168.1.112 255.255.255.240
+ default-router 192.168.1.126
+ dns-server 8.8.8.8
+ip dhcp pool RECEPTION
+ network 192.168.1.128 255.255.255.240
+ default-router 192.168.1.142
+ dns-server 8.8.8.8
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO2901/K9 sn FTX152441JC-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.16
+ encapsulation dot1Q 16
+ ip address 192.168.1.30 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.32
+ encapsulation dot1Q 32
+ ip address 192.168.1.46 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.48
+ encapsulation dot1Q 48
+ ip address 192.168.1.62 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.64
+ encapsulation dot1Q 64
+ ip address 192.168.1.78 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.80
+ encapsulation dot1Q 80
+ ip address 192.168.1.94 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.96
+ encapsulation dot1Q 96
+ ip address 192.168.1.110 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.112
+ encapsulation dot1Q 112
+ ip address 192.168.1.126 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/0.128
+ encapsulation dot1Q 128
+ ip address 192.168.1.142 255.255.255.240
+ ip nat inside
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.2 255.255.255.240
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface FastEthernet0/1/0
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/1/1
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/1/2
+ switchport mode access
+ switchport nonegotiate
+!
+interface FastEthernet0/1/3
+ switchport mode access
+ switchport nonegotiate
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router rip
+!
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+ip classless
+ip route 10.1.1.0 255.255.255.252 192.168.1.1 
+ip route 8.8.8.0 255.255.255.0 10.1.1.2 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 192.160.1.0 0.0.0.255
+access-list 1 permit 192.168.1.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
