@@ -155,9 +155,7 @@ router rip
 !
 ip nat inside source list 1 interface GigabitEthernet0/1 overload
 ip classless
-ip route 10.1.1.0 255.255.255.252 192.168.1.1 
-ip route 10.0.0.0 255.255.255.252 10.1.1.2 
-ip route 8.8.8.0 255.255.255.0 10.1.1.2 
+ip route 0.0.0.0 0.0.0.0 192.168.1.1 
 !
 ip flow-export version 9
 !

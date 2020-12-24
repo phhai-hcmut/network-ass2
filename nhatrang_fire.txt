@@ -9,12 +9,12 @@ names
 interface GigabitEthernet1/1
  nameif outside
  security-level 0
- ip address 10.1.1.1 255.255.255.252
+ ip address 10.1.2.1 255.255.255.252
 !
 interface GigabitEthernet1/2
- no nameif
- no security-level
- no ip address
+ nameif dmz
+ security-level 50
+ ip address 192.168.2.254 255.255.255.240
 !
 interface GigabitEthernet1/3
  no nameif
@@ -56,18 +56,30 @@ interface Management1/1
  management-only
  nameif inside
  security-level 100
- ip address 192.168.1.1 255.255.255.240
+ ip address 192.168.2.1 255.255.255.240
 !
+object network DMZ_OUT
+ subnet 192.168.2.240 255.255.255.240
 object network INSIDE-NET
- subnet 192.168.1.0 255.255.255.240
+ subnet 192.168.2.0 255.255.255.240
+object network SERVER
+ host 192.168.2.253
 !
-route outside 0.0.0.0 0.0.0.0 10.1.1.2 1
-route inside 0.0.0.0 0.0.0.0 192.168.1.2 1
+route outside 0.0.0.0 0.0.0.0 10.1.2.2 1
+route inside 0.0.0.0 0.0.0.0 192.168.2.2 1
+!
+access-list traffic_out extended permit icmp any any
+access-list OUT_DMZ extended permit tcp any any eq www
+access-list OUT_DMZ extended permit icmp any any
 !
 !
-!
+access-group OUT_DMZ in interface outside
+object network DMZ_OUT
+ nat (dmz,outside) dynamic interface
 object network INSIDE-NET
  nat (inside,outside) dynamic interface
+object network SERVER
+ nat (dmz,outside) static 10.1.2.1
 !
 !
 !
@@ -85,6 +97,12 @@ service-policy global_policy global
 !
 telnet timeout 5
 ssh timeout 5
+!
+dhcpd dns 8.8.8.8
+dhcpd option 3 ip 192.168.2.254
+!
+dhcpd address 192.168.2.241-192.168.2.253 dmz
+dhcpd enable dmz
 !
 !
 !
